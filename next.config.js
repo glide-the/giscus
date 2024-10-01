@@ -41,6 +41,19 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: `frame-ancestors 'self';`,
   },
+
+  {
+    key: 'Access-Control-Allow-Origin',
+    value: '*', // Allow all domains, or replace with your specific domain
+  },
+  {
+    key: 'Access-Control-Allow-Methods',
+    value: 'GET, POST, PUT, DELETE, OPTIONS',
+  },
+  {
+    key: 'Access-Control-Allow-Headers',
+    value: 'X-Requested-With, Content-Type, Authorization',
+  },
 ];
 
 const swr = 60 * 60 * 24 * 7; // 7 days
@@ -71,6 +84,15 @@ const config = withBundleAnalyzer(
                 value: `public, max-age=0, stale-while-revalidate=${swr}`,
               },
             ],
+          },
+
+          {
+            source: '/_next/static/(.*)', // Apply CORS headers to Next.js static files
+            headers: securityHeaders,
+          },
+          {
+            source: '/public/(.*)', // Apply CORS headers to public directory static files
+            headers: securityHeaders,
           },
         ];
       },
